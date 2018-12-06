@@ -19,7 +19,7 @@ public class Event {
     private LocalDateTime closeEnrollmentDateTime;
     private LocalDateTime beginEventDateTime;
     private LocalDateTime endEventDateTime;
-    private String location; // (optional) 이게 없으면 온라인 모임
+    private String location; // (optional) 온/오프라인 구분
     private int basePrice; // (optional)
     private int maxPrice; // (optional)
     private int limitOfEnrollment;
