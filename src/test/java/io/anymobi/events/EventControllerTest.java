@@ -42,8 +42,7 @@ public class EventControllerTest {
     @Test
     public void createEvent() throws Exception {
 
-        Event event = Event.builder()
-                .id(100)
+        EventDto event = EventDto.builder()
                 .name("Spring")
                 .description("Rest Api")
                 .beginEnrollmentDateTime(LocalDateTime.of(2018,11,23,12,00,00))
@@ -54,9 +53,6 @@ public class EventControllerTest {
                 .maxPrice(200)
                 .limitOfEnrollment(100)
                 .location("애니모비 회의실")
-                .free(true)
-                .offline(true)
-                .eventStatus(EventStatus.PUBLISHED)
                 .build();
 
 //        Mockito.when(eventRepository.save(event)).thenReturn(event);
@@ -75,6 +71,35 @@ public class EventControllerTest {
                 .andExpect(jsonPath("eventStatus").value(EventStatus.DRAFT.name()));
 
 
+
+    }
+
+    @Test
+    public void createEventBadRequest() throws Exception {
+
+        Event event = Event.builder()
+                .id(100)
+                .name("Spring")
+                .description("Rest Api")
+                .beginEnrollmentDateTime(LocalDateTime.of(2018,11,23,12,00,00))
+                .closeEnrollmentDateTime(LocalDateTime.of(2018,11,24,12,00,00))
+                .beginEventDateTime(LocalDateTime.of(2018,11,25,12,00,00))
+                .endEventDateTime(LocalDateTime.of(2018,11,26,12,00,00))
+                .basePrice(100)
+                .maxPrice(200)
+                .limitOfEnrollment(100)
+                .location("애니모비 회의실")
+                .free(true)
+                .offline(true)
+                .eventStatus(EventStatus.PUBLISHED)
+                .build();
+
+        mockMvc.perform(post("/api/events")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .accept(MediaTypes.HAL_JSON)
+                .content(objectMapper.writeValueAsString(event)))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
 
     }
 
