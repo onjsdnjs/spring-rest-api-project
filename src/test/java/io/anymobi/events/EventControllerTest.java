@@ -1,6 +1,7 @@
 package io.anymobi.events;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.anymobi.common.TestDescription;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -40,6 +41,7 @@ public class EventControllerTest {
     EventRepository eventRepository;*/
 
     @Test
+    @TestDescription("정상적으로 이벤트를 생성하는 테스트")
     public void createEvent() throws Exception {
 
         EventDto event = EventDto.builder()
@@ -75,6 +77,7 @@ public class EventControllerTest {
     }
 
     @Test
+    @TestDescription("전송하면 안되는 속성을 전송했을 때 에러가 발생하는 테스트")
     public void createEventBadRequest() throws Exception {
 
         Event event = Event.builder()
@@ -104,6 +107,7 @@ public class EventControllerTest {
     }
 
     @Test
+    @TestDescription("데이터를 빈값으로 입력했을 때 에러가 발생하는 테스트")
     public void createEventBadRequestEmptyInput() throws Exception {
 
         EventDto event = EventDto.builder().build();
@@ -114,7 +118,9 @@ public class EventControllerTest {
                 .andExpect(status().isBadRequest());
     }
 
+
     @Test
+    @TestDescription("틀린 데이터를 입력했을 때 에러가 발생하는 테스트")
     public void createEventBadRequestWrongInput() throws Exception {
 
         EventDto event = EventDto.builder()
