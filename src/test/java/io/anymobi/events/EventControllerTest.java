@@ -17,12 +17,19 @@ import org.springframework.context.annotation.Import;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
 
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
+import static org.springframework.restdocs.headers.HeaderDocumentation.responseHeaders;
+import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.linkWithRel;
+import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.links;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
@@ -40,6 +47,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @AutoConfigureRestDocs
 @Import(RestDocsConfiguration.class)
+@ActiveProfiles("test")
 public class EventControllerTest {
 
     @Autowired
@@ -85,8 +93,65 @@ public class EventControllerTest {
                 .andExpect(jsonPath("eventStatus").value(EventStatus.DRAFT.name()))
                 .andExpect(jsonPath("_links.self").exists())
                 .andExpect(jsonPath("_links.query-events").exists())
-                .andExpect(jsonPath("_links.update-events").exists())
-                .andDo(document("create-event"));
+                .andExpect(jsonPath("_links.update-event").exists())
+                .andDo(document("create-event",
+                        links(
+                                linkWithRel("self").description("link to self"),
+                                linkWithRel("query-events").description("link to query events"),
+                                linkWithRel("update-event").description("link to update event"),
+                                linkWithRel("profile").description("link to profile")
+                        ),
+
+                        requestHeaders(
+
+                                headerWithName(HttpHeaders.ACCEPT).description("accept header"),
+                                headerWithName(HttpHeaders.CONTENT_TYPE).description("contentType")
+                        ),
+
+                        requestFields(
+                                fieldWithPath("name").description("Name of new event"),
+                                fieldWithPath("description").description("Description of new event"),
+                                fieldWithPath("beginEnrollmentDateTime").description("BeginEnrollmentDateTime of new event"),
+                                fieldWithPath("closeEnrollmentDateTime").description("CloseEnrollmentDateTime of new event"),
+                                fieldWithPath("beginEventDateTime").description("BeginEventDateTime of new event"),
+                                fieldWithPath("endEventDateTime").description("EndEventDateTime of new event"),
+                                fieldWithPath("location").description("Location of new event"),
+                                fieldWithPath("basePrice").description("BasePrice of new event"),
+                                fieldWithPath("maxPrice").description("MaxPrice of new event"),
+                                fieldWithPath("limitOfEnrollment").description("LimitOfEnrollment of new event")
+
+                        ),
+                        responseHeaders(
+
+                                headerWithName(HttpHeaders.LOCATION).description("accept header"),
+                                headerWithName(HttpHeaders.CONTENT_TYPE).description("contentType")
+                        ),
+
+                        responseFields(
+                                fieldWithPath("id").description("Id of new event"),
+                                fieldWithPath("name").description("Name of new event"),
+                                fieldWithPath("description").description("Description of new event"),
+                                fieldWithPath("beginEnrollmentDateTime").description("BeginEnrollmentDateTime of new event"),
+                                fieldWithPath("closeEnrollmentDateTime").description("CloseEnrollmentDateTime of new event"),
+                                fieldWithPath("beginEventDateTime").description("BeginEventDateTime of new event"),
+                                fieldWithPath("endEventDateTime").description("EndEventDateTime of new event"),
+                                fieldWithPath("location").description("Location of new event"),
+                                fieldWithPath("basePrice").description("BasePrice of new event"),
+                                fieldWithPath("maxPrice").description("MaxPrice of new event"),
+                                fieldWithPath("limitOfEnrollment").description("LimitOfEnrollment of new event"),
+                                fieldWithPath("offline").description("Offline of new event"),
+                                fieldWithPath("free").description("Free of new event"),
+                                fieldWithPath("eventStatus").description("EventStatus of new event"),
+                                fieldWithPath("_links.self.href").description("Links Self of new event"),
+                                fieldWithPath("_links.query-events.href").description("Links Query Events of new event"),
+                                fieldWithPath("_links.update-event.href").description("Links Update Events of new event"),
+                                fieldWithPath("_links.profile.href").description("Links profile Event of new event")
+
+                        )
+
+                        )
+
+                );
 
 
 
