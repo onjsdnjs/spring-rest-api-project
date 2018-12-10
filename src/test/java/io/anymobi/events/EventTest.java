@@ -62,6 +62,7 @@ public class EventTest {
                 .maxPrice(maxPrice)
                 .build();
         // When
+
         event.update();
 
         // Then
