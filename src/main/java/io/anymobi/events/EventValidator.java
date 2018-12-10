@@ -25,6 +25,7 @@ public class EventValidator {
         // TODO BeginEventDateTime
         // TODO ClsoeEnrollmentTime
 
+
     }
 
 }

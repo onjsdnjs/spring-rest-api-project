@@ -16,6 +16,5 @@ public class RestDocsConfiguration {
         return configurer -> configurer.operationPreprocessors()
                 .withRequestDefaults(prettyPrint())
                 .withResponseDefaults(prettyPrint());
-
     }
 }

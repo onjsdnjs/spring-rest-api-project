@@ -32,6 +32,7 @@ public class EventController {
         this.eventRepository = eventRepository;
         this.modelMapper = modelMapper;
         this.eventValidator = eventValidator;
+
     }
 
     @PostMapping

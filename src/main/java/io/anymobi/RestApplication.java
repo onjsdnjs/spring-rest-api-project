@@ -18,4 +18,5 @@ public class RestApplication {
     public ModelMapper modelMapper() {
         return new ModelMapper();
     }
+
 }
