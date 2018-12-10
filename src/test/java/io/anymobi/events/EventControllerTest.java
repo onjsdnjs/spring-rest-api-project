@@ -64,6 +64,7 @@ public class EventControllerTest {
                 .endEventDateTime(LocalDateTime.of(2018,11,26,12,00,00))
                 .basePrice(100)
                 .maxPrice(200)
+
                 .limitOfEnrollment(100)
                 .location("애니모비 회의실")
                 .build();
