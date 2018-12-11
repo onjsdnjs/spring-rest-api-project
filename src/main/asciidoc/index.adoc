@@ -1,13 +1,13 @@
 = Natural REST API Guide
-백기선;
+정수원;
 :doctype: book
 :icons: font
 :source-highlighter: highlightjs
 :toc: left
 :toclevels: 4
 :sectlinks:
-:operation-curl-request-title: Example request
-:operation-http-response-title: Example response
+:operation-curl-request-title: Curl request
+:operation-http-response-title: Http response
 
 [[overview]]
 = 개요
@@ -125,4 +125,4 @@ operation::get-an-event[snippets='request-fields,curl-request,http-response,link
 
 `PUT` 요청을 사용해서 기존 이벤트를 수정할 수 있다.
 
-operation::update-event[snippets='request-fields,curl-request,http-response,links']
+operation::update-event[snippets='curl-request,request-fields,http-request,request-body, reqeust-fields,request-headers,http-response,response-body, response-fields, response.headers, links']

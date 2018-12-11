@@ -62,6 +62,32 @@ public class EventController {
 
     }
 
+    @PostMapping
+    public ResponseEntity createEvent(@RequestBody @Valid EventDto eventDto, Errors errors){
+
+        if (errors.hasErrors()) {
+            return badRequest(errors);
+        }
+
+        eventValidator.validate(eventDto, errors);
+
+        if (errors.hasErrors()) {
+            return badRequest(errors);
+        }
+
+        Event event = modelMapper.map(eventDto, Event.class);
+        event.update();
+        Event newEvent = this.eventRepository.save(event);
+
+        ControllerLinkBuilder selfLinkBuilder = linkTo(EventController.class).slash(newEvent.getId());
+        URI createUri = selfLinkBuilder.toUri();
+        EventResource eventResource = new EventResource(newEvent);
+        eventResource.add(selfLinkBuilder.withRel("update-event"));
+        eventResource.add(linkTo(EventController.class).withRel("query-events"));
+        eventResource.add(new Link("/docs/index.html#resources-events-create").withRel("profile"));
+        return ResponseEntity.created(createUri).body(eventResource);
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity updateEvent(@PathVariable Integer id,
                                       @RequestBody @Valid EventDto eventDto, Errors errors  ) {
@@ -90,32 +116,6 @@ public class EventController {
 
         return ResponseEntity.ok(eventResource);
 
-    }
-
-    @PostMapping
-    public ResponseEntity createEvent(@RequestBody @Valid EventDto eventDto, Errors errors){
-
-        if (errors.hasErrors()) {
-            return badRequest(errors);
-        }
-
-        eventValidator.validate(eventDto, errors);
-
-        if (errors.hasErrors()) {
-            return badRequest(errors);
-        }
-
-        Event event = modelMapper.map(eventDto, Event.class);
-        event.update();
-        Event newEvent = this.eventRepository.save(event);
-
-        ControllerLinkBuilder selfLinkBuilder = linkTo(EventController.class).slash(newEvent.getId());
-        URI createUri = selfLinkBuilder.toUri();
-        EventResource eventResource = new EventResource(newEvent);
-        eventResource.add(selfLinkBuilder.withRel("update-event"));
-        eventResource.add(linkTo(EventController.class).withRel("query-events"));
-        eventResource.add(new Link("/docs/index.html#resources-events-create").withRel("profile"));
-        return ResponseEntity.created(createUri).body(eventResource);
     }
 
     private ResponseEntity<ErrorsResource> badRequest(Errors errors) {
