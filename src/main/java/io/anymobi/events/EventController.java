@@ -62,6 +62,36 @@ public class EventController {
 
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity updateEvent(@PathVariable Integer id,
+                                      @RequestBody @Valid EventDto eventDto, Errors errors  ) {
+        Optional<Event> OptionalId = this.eventRepository.findById(id);
+        if (OptionalId.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        if (errors.hasErrors()) {
+            return badRequest(errors);
+        }
+
+        eventValidator.validate(eventDto, errors);
+        if (errors.hasErrors()) {
+            return badRequest(errors);
+        }
+
+        Event existingEvent = OptionalId.get();
+        this.modelMapper.map(eventDto, existingEvent);
+        /**
+         * 아직 Service 가 없고 @Transactional 이 없는 상태기 때문에 수동으로 save 하고 있다
+         */
+        Event savedEvent = this.eventRepository.save(existingEvent);
+        EventResource eventResource = new EventResource(savedEvent);
+        eventResource.add(new Link("/docs/index.html#resources-events-update").withRel("profile"));
+
+        return ResponseEntity.ok(eventResource);
+
+    }
+
     @PostMapping
     public ResponseEntity createEvent(@RequestBody @Valid EventDto eventDto, Errors errors){
 
