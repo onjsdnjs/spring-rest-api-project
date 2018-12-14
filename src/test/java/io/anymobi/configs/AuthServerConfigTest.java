@@ -3,6 +3,7 @@ package io.anymobi.configs;
 import io.anymobi.accounts.Account;
 import io.anymobi.accounts.AccountRole;
 import io.anymobi.accounts.AccountService;
+import io.anymobi.common.AppSecurityProperties;
 import io.anymobi.common.BaseControllerTest;
 import io.anymobi.common.TestDescription;
 import org.junit.Test;
@@ -22,6 +23,9 @@ public class AuthServerConfigTest extends BaseControllerTest {
     @Autowired
     AccountService accountService;
 
+    @Autowired
+    AppSecurityProperties appSecurityProperties;
+
     @Test
     @TestDescription("인증 토큰을 발급받는 테슽")
     public void getAuthToken() throws Exception {
@@ -36,11 +40,8 @@ public class AuthServerConfigTest extends BaseControllerTest {
                 .build();
         accountService.saveAccount(account);
 
-        String clientId = "myApp";
-        String clientSecret = "pass";
-
         this.mockMvc.perform(post("/oauth/token")
-                .with(httpBasic(clientId, clientSecret))
+                .with(httpBasic(appSecurityProperties.getDefaultClientId(), appSecurityProperties.getDefaultClientSecret()))
                 .param("username", username)
                 .param("password", password)
                 .param("grant_type", "password"))

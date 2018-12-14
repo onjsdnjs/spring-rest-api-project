@@ -1,6 +1,7 @@
 package io.anymobi.configs;
 
 import io.anymobi.accounts.AccountService;
+import io.anymobi.common.AppSecurityProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -29,6 +30,9 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
     @Autowired
     PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private AppSecurityProperties appSecurityProperties;
+
     /**
      * clientSecret 인코딩 처리
      * @param security
@@ -48,12 +52,12 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         clients.inMemory()
-                .withClient("myApp")
+                .withClient(appSecurityProperties.getDefaultClientId())
                 .authorizedGrantTypes("password", "refresh_token")
-                .scopes("read", "write")
-                .secret(this.passwordEncoder.encode("pass"))
+                .scopes("read", "write", "trust")
+                .secret(passwordEncoder.encode(appSecurityProperties.getDefaultClientSecret()))
                 .accessTokenValiditySeconds(10 * 60)
-                .refreshTokenValiditySeconds(6 * 10 * 60);
+                .refreshTokenValiditySeconds(60 * 60);
     }
 
     @Override
