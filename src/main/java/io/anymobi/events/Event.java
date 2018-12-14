@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 @Entity
 public class Event {
 
+
     @Id
     @GeneratedValue
     private Integer id;

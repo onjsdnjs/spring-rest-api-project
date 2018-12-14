@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 @Data
 public class EventDto {
 
+
     @NotEmpty
     private String name;
     @NotEmpty

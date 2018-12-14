@@ -25,6 +25,7 @@ import static org.junit.Assert.fail;
 @ActiveProfiles("test")
 public class AccountServiceTest {
 
+
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
 

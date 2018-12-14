@@ -18,6 +18,7 @@ import java.io.IOException;
 @JsonComponent
 public class ErrorsSerializer extends JsonSerializer<Errors> {
 
+
     @Override
     public void serialize(Errors errors, JsonGenerator gen, SerializerProvider serializers) throws IOException {
 

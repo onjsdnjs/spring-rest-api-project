@@ -27,6 +27,7 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 @RequestMapping(value = "/api/events", produces = MediaTypes.HAL_JSON_UTF8_VALUE) // 모든 응답을 MediaTypes.HAL_JSON_UTF8_VALUE 로 보낸다
 public class EventController {
 
+
     private final EventRepository eventRepository;
 
     private final ModelMapper modelMapper;
